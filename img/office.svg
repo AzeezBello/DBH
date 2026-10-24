@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <defs>
+    <linearGradient id="offBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#18324E"/>
+      <stop offset="50%" stop-color="#234B73"/>
+      <stop offset="100%" stop-color="#0F2133"/>
+    </linearGradient>
+    <linearGradient id="floorGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#B5A69B"/>
+      <stop offset="100%" stop-color="#847366"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#offBg)"/>
+  <!-- Floor -->
+  <polygon points="0,360 800,360 800,600 0,600" fill="url(#floorGrad)"/>
+  <line x1="400" y1="360" x2="200" y2="600" stroke="#69594D" stroke-width="1.5" opacity="0.5"/>
+  <line x1="400" y1="360" x2="600" y2="600" stroke="#69594D" stroke-width="1.5" opacity="0.5"/>
+
+  <!-- Glass Conference Wall in Background -->
+  <rect x="120" y="60" width="560" height="300" fill="#FFFFFF" fill-opacity="0.08" stroke="#5279A4" stroke-width="3"/>
+  <line x1="400" y1="60" x2="400" y2="360" stroke="#5279A4" stroke-width="2"/>
+
+  <!-- Designer Pendant Lighting -->
+  <circle cx="270" cy="170" r="16" fill="#FFF176" opacity="0.9"/>
+  <line x1="270" y1="60" x2="270" y2="154" stroke="#FFF176" stroke-width="2"/>
+  <circle cx="530" cy="170" r="16" fill="#FFF176" opacity="0.9"/>
+  <line x1="530" y1="60" x2="530" y2="154" stroke="#FFF176" stroke-width="2"/>
+
+  <!-- Executive Boardroom Table -->
+  <ellipse cx="400" cy="420" rx="280" ry="50" fill="#2A180D" stroke="#452918" stroke-width="4"/>
+  <ellipse cx="400" cy="416" rx="270" ry="45" fill="#3B2213"/>
+
+  <!-- Conference Chairs -->
+  <ellipse cx="240" cy="405" rx="26" ry="20" fill="#1B2A3D"/>
+  <ellipse cx="560" cy="405" rx="26" ry="20" fill="#1B2A3D"/>
+  <ellipse cx="320" cy="375" rx="23" ry="18" fill="#152232"/>
+  <ellipse cx="480" cy="375" rx="23" ry="18" fill="#152232"/>
+  <ellipse cx="400" cy="370" rx="23" ry="18" fill="#152232"/>
+</svg>

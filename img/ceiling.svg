@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <defs>
+    <linearGradient id="bgGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1B365D"/>
+      <stop offset="50%" stop-color="#264A75"/>
+      <stop offset="100%" stop-color="#0E213D"/>
+    </linearGradient>
+    <linearGradient id="woodBaffle" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#D4A373"/>
+      <stop offset="100%" stop-color="#9C6634"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bgGrad1)"/>
+  
+  <!-- Architectural Ceiling Baffles Perspective -->
+  <g opacity="0.9">
+    <path d="M0,0 L800,110 L800,126 L0,20 Z" fill="url(#woodBaffle)"/>
+    <path d="M0,32 L800,138 L800,154 L0,52 Z" fill="url(#woodBaffle)"/>
+    <path d="M0,64 L800,166 L800,182 L0,84 Z" fill="url(#woodBaffle)"/>
+    <path d="M0,96 L800,194 L800,210 L0,116 Z" fill="url(#woodBaffle)"/>
+    <path d="M0,128 L800,222 L800,238 L0,148 Z" fill="url(#woodBaffle)"/>
+    <path d="M0,160 L800,250 L800,266 L0,180 Z" fill="url(#woodBaffle)"/>
+    <path d="M0,192 L800,278 L800,294 L0,212 Z" fill="url(#woodBaffle)"/>
+    <path d="M0,224 L800,306 L800,322 L0,244 Z" fill="url(#woodBaffle)"/>
+  </g>
+  
+  <!-- Integrated Recessed LED Linear Lights -->
+  <polygon points="40,38 760,144 760,150 40,44" fill="#FFFFFF" opacity="0.95"/>
+  <polygon points="40,102 760,200 760,206 40,108" fill="#FFFFFF" opacity="0.95"/>
+  <polygon points="40,166 760,256 760,262 40,172" fill="#FFFFFF" opacity="0.95"/>
+
+  <!-- Interior Office Wall & Glass Perspective -->
+  <polygon points="0,270 450,370 450,600 0,600" fill="#132338" opacity="0.8"/>
+  <polygon points="450,370 800,340 800,600 450,600" fill="#1C3554" opacity="0.85"/>
+  <line x1="450" y1="370" x2="450" y2="600" stroke="#4878A8" stroke-width="3"/>
+  <line x1="220" y1="320" x2="220" y2="600" stroke="#2D4D70" stroke-width="2"/>
+  <line x1="620" y1="355" x2="620" y2="600" stroke="#2D4D70" stroke-width="2"/>
+</svg>

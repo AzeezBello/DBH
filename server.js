@@ -76,10 +76,11 @@ const server = http.createServer((req, res) => {
   });
 });
 
-server.listen(PORT, () => {
+server.listen(PORT, '0.0.0.0', () => {
   console.log('----------------------------------------------------');
   console.log(` DBH 3D Interactive Platform is live!`);
   console.log(` Local Server:   http://localhost:${PORT}`);
+  console.log(` Network Server: http://127.0.0.1:${PORT}`);
   console.log(` Serving from:   ${PUBLIC_DIR}`);
   console.log('----------------------------------------------------');
 });

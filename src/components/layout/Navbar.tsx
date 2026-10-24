@@ -1,125 +1,107 @@
 import React, { useState, useEffect } from "react";
-import { Magnetic } from "@/components/animations/Magnetic";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Menu, X, Sparkles, PhoneCall } from "lucide-react";
+import { isSoundEnabled, toggleSound, playFloorClick } from "@/lib/audio";
+import { Volume2, VolumeX, Sparkles } from "lucide-react";
 
 interface NavbarProps {
   onOpenConsultation: () => void;
 }
 
 export function Navbar({ onOpenConsultation }: NavbarProps) {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [soundOn, setSoundOn] = useState(true);
+  const [lagosTime, setLagosTime] = useState("");
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+    setSoundOn(isSoundEnabled());
+
+    const updateClock = () => {
+      const now = new Date();
+      // Lagos is UTC+1 (WAT)
+      const options: Intl.DateTimeFormatOptions = {
+        timeZone: "Africa/Lagos",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+      };
+      setLagosTime(now.toLocaleTimeString("en-GB", options));
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    updateClock();
+    const interval = setInterval(updateClock, 1000);
+    return () => clearInterval(interval);
   }, []);
 
-  const navLinks = [
-    { label: "About", href: "#about" },
-    { label: "3D Space", href: "#showroom" },
-    { label: "Products", href: "#products" },
-    { label: "Solutions", href: "#solutions" },
-    { label: "Services", href: "#services" },
-    { label: "Projects", href: "#case-studies" },
-    { label: "Partners", href: "#partners" },
-    { label: "Contact", href: "#contact" },
-  ];
+  const handleToggleAudio = () => {
+    const nextState = toggleSound();
+    setSoundOn(nextState);
+  };
+
+  const handleInquire = () => {
+    playFloorClick();
+    onOpenConsultation();
+  };
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-slate-950/80 backdrop-blur-xl border-b border-white/10 shadow-2xl shadow-black/50 py-3"
-          : "bg-transparent py-5"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        {/* Brand Logo */}
-        <a href="#" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-dbh-navy to-dbh-cyan flex items-center justify-center font-bold text-white shadow-[0_0_15px_rgba(0,164,239,0.5)] border border-white/20 group-hover:scale-105 transition-transform">
-            DBH
-          </div>
-          <div className="flex flex-col">
-            <span className="font-bold text-lg tracking-wider text-white group-hover:text-dbh-cyan transition-colors">
-              DBH SOLUTIONS
-            </span>
-            <span className="text-[10px] text-slate-400 font-mono tracking-widest uppercase">
-              Workspace &amp; Tech
-            </span>
-          </div>
-        </a>
-
-        {/* Desktop Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className="text-sm font-medium text-slate-300 hover:text-dbh-cyan transition-colors relative py-1 group"
-            >
-              {link.label}
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-dbh-cyan transition-all duration-300 group-hover:w-full" />
-            </a>
-          ))}
-        </nav>
-
-        {/* Action Button */}
-        <div className="hidden sm:flex items-center gap-4">
-          <Magnetic strength={0.3}>
-            <Button
-              variant="glow"
-              size="default"
-              onClick={onOpenConsultation}
-              className="gap-2 text-xs uppercase tracking-wider font-semibold"
-            >
-              <Sparkles className="w-4 h-4 text-cyan-200" />
-              <span>Book Consultation</span>
-            </Button>
-          </Magnetic>
+    <header className="fixed top-0 left-0 right-0 z-50 py-6 px-6 lg:px-12 flex items-center justify-between select-none pointer-events-auto">
+      {/* Brand Logo */}
+      <a
+        href="#floor-01"
+        onClick={() => playFloorClick()}
+        className="flex items-center gap-3 group"
+      >
+        <div className="w-8 h-8 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center font-bold text-sm text-white group-hover:bg-dbh-cyan group-hover:text-black transition-all">
+          D
         </div>
+        <div className="flex flex-col">
+          <span className="font-bold tracking-widest text-sm text-white group-hover:text-dbh-cyan transition-colors">
+            DBH
+          </span>
+          <span className="text-[9px] font-mono tracking-widest uppercase text-slate-500">
+            SOLUTIONS
+          </span>
+        </div>
+      </a>
 
-        {/* Mobile Menu Toggle */}
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="lg:hidden p-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/10 transition-colors"
-          aria-label="Toggle menu"
-        >
-          {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+      {/* Center Metadata: Live Lagos Time & Coordinates */}
+      <div className="hidden lg:flex items-center gap-4 px-4 py-1.5 rounded-full bg-slate-950/60 border border-white/10 backdrop-blur-xl text-xs font-mono text-slate-400">
+        <span className="flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span>LAGOS, NG</span>
+        </span>
+        <span className="text-white font-semibold">{lagosTime} WAT</span>
+        <span className="text-slate-600">•</span>
+        <span className="text-slate-500">6.4311° N, 3.4270° E</span>
       </div>
 
-      {/* Mobile Drawer */}
-      {mobileMenuOpen && (
-        <div className="lg:hidden px-6 pt-4 pb-6 bg-slate-950/95 border-b border-white/10 backdrop-blur-2xl flex flex-col gap-4 animate-in slide-in-from-top-4 duration-300">
-          {navLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-base font-medium text-slate-200 hover:text-dbh-cyan py-2 border-b border-white/5"
-            >
-              {link.label}
-            </a>
-          ))}
-          <Button
-            variant="glow"
-            onClick={() => {
-              setMobileMenuOpen(false);
-              onOpenConsultation();
-            }}
-            className="w-full mt-2 gap-2"
-          >
-            <Sparkles className="w-4 h-4" />
-            <span>Book Consultation</span>
-          </Button>
-        </div>
-      )}
+      {/* Right Actions: Sound Toggle & Minimalist CTA */}
+      <div className="flex items-center gap-4">
+        {/* Sound Switch */}
+        <button
+          onClick={handleToggleAudio}
+          className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-mono text-slate-300 transition-colors"
+          title={soundOn ? "Mute audio" : "Enable tactile sound"}
+        >
+          {soundOn ? (
+            <>
+              <Volume2 className="w-3.5 h-3.5 text-dbh-cyan" />
+              <span className="hidden sm:inline text-[11px]">AUDIO ON</span>
+            </>
+          ) : (
+            <>
+              <VolumeX className="w-3.5 h-3.5 text-slate-500" />
+              <span className="hidden sm:inline text-[11px] text-slate-500">MUTED</span>
+            </>
+          )}
+        </button>
+
+        {/* Minimalist Inquire Button */}
+        <button
+          onClick={handleInquire}
+          className="relative px-5 py-2 rounded-full bg-white text-slate-950 font-semibold text-xs tracking-wider uppercase hover:bg-dbh-cyan hover:text-white transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:shadow-[0_0_25px_rgba(0,164,239,0.5)]"
+        >
+          <span>Inquire</span>
+        </button>
+      </div>
     </header>
   );
 }

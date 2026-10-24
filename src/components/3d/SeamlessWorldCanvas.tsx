@@ -1,35 +1,33 @@
 import React, { useRef, useEffect, useState, useMemo } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Float, Html, useTexture, Environment } from "@react-three/drei";
+import { Float, useTexture } from "@react-three/drei";
 import * as THREE from "three";
 
-// Camera trajectory waypoints along the scroll path (0.0 to 1.0)
+// 6 Camera trajectory waypoints matching the 6 architectural floors
 const WAYPOINTS = [
-  // 0.0 - Hero: Global high-angle overview of the floating architectural room
-  { scroll: 0.0, pos: new THREE.Vector3(0, 2.8, 7.2), lookAt: new THREE.Vector3(0, 0.6, 0) },
-  // 0.2 - Showroom: Mid-angle isometric
-  { scroll: 0.2, pos: new THREE.Vector3(3.2, 2.2, 5.0), lookAt: new THREE.Vector3(0, 0.8, 0) },
-  // 0.4 - Acoustics & Products: Zoom in and look up at the ceiling baffles
-  { scroll: 0.4, pos: new THREE.Vector3(0.5, 2.4, 2.8), lookAt: new THREE.Vector3(0, 3.4, 0) },
-  // 0.6 - Solutions & Dealing Rooms: Close-up on the financial trading screens
-  { scroll: 0.6, pos: new THREE.Vector3(-1.8, 1.1, 2.2), lookAt: new THREE.Vector3(-1.3, 0.75, 0.4) },
-  // 0.8 - Services & Executive Suite: Look through glass partition to boardroom
-  { scroll: 0.8, pos: new THREE.Vector3(2.4, 1.4, 1.6), lookAt: new THREE.Vector3(1.3, 0.7, -0.2) },
-  // 0.95 - Case Studies & Footer: Pull back to majestic low-angle illuminated view
-  { scroll: 1.0, pos: new THREE.Vector3(0, 0.8, 6.6), lookAt: new THREE.Vector3(0, 1.6, 0) },
+  // Floor 01: Atrium & Overview
+  { scroll: 0.0, pos: new THREE.Vector3(0, 2.8, 7.5), lookAt: new THREE.Vector3(0, 0.6, 0) },
+  // Floor 02: Acoustic Ceilings (Camera zooms in and looks up into wood baffles)
+  { scroll: 0.2, pos: new THREE.Vector3(0.4, 2.2, 2.5), lookAt: new THREE.Vector3(0, 3.4, 0) },
+  // Floor 03: Financial Dealing Rooms (Camera moves directly into the trading monitor console)
+  { scroll: 0.4, pos: new THREE.Vector3(-1.4, 1.1, 1.9), lookAt: new THREE.Vector3(-1.3, 0.75, 0.4) },
+  // Floor 04: Executive Boardroom & Sedus (Camera moves across into the glass partition)
+  { scroll: 0.6, pos: new THREE.Vector3(1.8, 1.2, 1.6), lookAt: new THREE.Vector3(1.4, 0.7, -0.2) },
+  // Floor 05: Completed Portfolio (Camera focuses on floating project photo portals)
+  { scroll: 0.8, pos: new THREE.Vector3(0, 1.6, 4.8), lookAt: new THREE.Vector3(0, 1.8, 0) },
+  // Floor 06: Lagos HQ (Low-angle illuminated perspective)
+  { scroll: 1.0, pos: new THREE.Vector3(0, 0.6, 6.8), lookAt: new THREE.Vector3(0, 1.6, 0) },
 ];
 
 function CameraController({ mousePos }: { mousePos: { x: number; y: number } }) {
   const { camera } = useThree();
-  const currentPos = useRef(new THREE.Vector3(0, 2.8, 7.2));
+  const currentPos = useRef(new THREE.Vector3(0, 2.8, 7.5));
   const currentLookAt = useRef(new THREE.Vector3(0, 0.6, 0));
 
   useFrame((_, delta) => {
-    // Calculate normalized scroll percentage (0 to 1)
     const scrollMax = document.documentElement.scrollHeight - window.innerHeight;
     const scrollProgress = scrollMax > 0 ? Math.min(Math.max(window.scrollY / scrollMax, 0), 1) : 0;
 
-    // Find the two surrounding waypoints
     let startWP = WAYPOINTS[0];
     let endWP = WAYPOINTS[WAYPOINTS.length - 1];
 
@@ -44,17 +42,18 @@ function CameraController({ mousePos }: { mousePos: { x: number; y: number } }) 
     const range = endWP.scroll - startWP.scroll;
     const factor = range > 0 ? (scrollProgress - startWP.scroll) / range : 0;
 
-    // Interpolate target camera position and lookAt vector
-    const targetPos = new THREE.Vector3().lerpVectors(startWP.pos, endWP.pos, factor);
-    const targetLookAt = new THREE.Vector3().lerpVectors(startWP.lookAt, endWP.lookAt, factor);
+    // Smooth cubic easing between waypoints
+    const smoothFactor = factor * factor * (3 - 2 * factor);
 
-    // Apply subtle mouse parallax to target position
-    targetPos.x += mousePos.x * 0.45;
-    targetPos.y += mousePos.y * 0.35;
+    const targetPos = new THREE.Vector3().lerpVectors(startWP.pos, endWP.pos, smoothFactor);
+    const targetLookAt = new THREE.Vector3().lerpVectors(startWP.lookAt, endWP.lookAt, smoothFactor);
 
-    // Smoothly lerp actual camera position and lookAt
-    currentPos.current.lerp(targetPos, delta * 3.5);
-    currentLookAt.current.lerp(targetLookAt, delta * 3.5);
+    // Subtle mouse parallax
+    targetPos.x += mousePos.x * 0.4;
+    targetPos.y += mousePos.y * 0.3;
+
+    currentPos.current.lerp(targetPos, delta * 3.8);
+    currentLookAt.current.lerp(targetLookAt, delta * 3.8);
 
     camera.position.copy(currentPos.current);
     camera.lookAt(currentLookAt.current);
@@ -83,7 +82,7 @@ function Seamless3DEnvironment() {
 
   return (
     <group position={[0, -0.6, 0]}>
-      {/* 1. Base Floating Architectural Deck with Real Stone/Concrete Texture */}
+      {/* 1. Base Floating Platform with Real Stone/Concrete Texture */}
       <mesh position={[0, -0.05, 0]} receiveShadow>
         <cylinderGeometry args={[4.6, 4.8, 0.18, 48]} />
         <meshStandardMaterial map={floorTexture} roughness={0.3} metalness={0.55} />
@@ -128,12 +127,10 @@ function Seamless3DEnvironment() {
 
       {/* 3. FINANCIAL DEALING ROOM CONSOLE WITH REAL FINANCIAL CHARTS */}
       <group position={[-1.3, 0.7, 0.4]} rotation={[0, Math.PI / 4, 0]}>
-        {/* Worktop */}
         <mesh position={[0, 0, 0]} castShadow>
           <boxGeometry args={[2.2, 0.08, 0.95]} />
           <meshStandardMaterial color="#0b1329" roughness={0.3} metalness={0.8} />
         </mesh>
-        {/* Steel Legs */}
         <mesh position={[-0.9, -0.38, 0]}>
           <boxGeometry args={[0.08, 0.68, 0.75]} />
           <meshStandardMaterial color="#334155" metalness={0.9} />
@@ -185,7 +182,6 @@ function Seamless3DEnvironment() {
 
       {/* 4. EXECUTIVE SUITE WITH GLASS PARTITION & REAL WOOD CONFERENCE TABLE */}
       <group position={[1.4, 0.7, -0.2]} rotation={[0, -Math.PI / 6, 0]}>
-        {/* Glass Partition */}
         <mesh position={[0, 0.85, -1.0]}>
           <boxGeometry args={[3.0, 2.3, 0.04]} />
           <meshPhysicalMaterial
@@ -199,7 +195,6 @@ function Seamless3DEnvironment() {
           />
         </mesh>
 
-        {/* Conference Table */}
         <mesh position={[0, 0, 0]} castShadow>
           <cylinderGeometry args={[0.95, 0.95, 0.07, 48]} />
           <meshStandardMaterial map={woodTexture} roughness={0.3} metalness={0.2} />
@@ -231,7 +226,6 @@ function Seamless3DEnvironment() {
 
       {/* 5. FLOATING 3D SPATIAL PHOTOGRAPHY PORTALS */}
       <Float speed={1.6} rotationIntensity={0.2} floatIntensity={0.4}>
-        {/* Real Ceiling Project Portal */}
         <group position={[-3.0, 2.2, -1.8]} rotation={[0, 0.35, 0]}>
           <mesh castShadow>
             <planeGeometry args={[1.6, 1.0]} />
@@ -243,7 +237,6 @@ function Seamless3DEnvironment() {
           </mesh>
         </group>
 
-        {/* Real Trading Floor Project Portal */}
         <group position={[3.0, 2.4, -1.6]} rotation={[0, -0.35, 0]}>
           <mesh castShadow>
             <planeGeometry args={[1.6, 1.0]} />
@@ -255,7 +248,6 @@ function Seamless3DEnvironment() {
           </mesh>
         </group>
 
-        {/* Real Boardroom Project Portal */}
         <group position={[0, 0.9, -3.2]}>
           <mesh castShadow>
             <planeGeometry args={[1.8, 1.1]} />
@@ -339,16 +331,16 @@ export function SeamlessWorldCanvas() {
       <Canvas shadows dpr={[1, 1.75]}>
         <CameraController mousePos={mousePos} />
 
-        <ambientLight intensity={0.7} />
-        <directionalLight position={[6, 12, 6]} intensity={2.0} castShadow />
-        <pointLight position={[-4, 4, -2]} intensity={3.0} color="#00A4EF" />
-        <pointLight position={[4, 3, 4]} intensity={2.0} color="#6366F1" />
-        <pointLight position={[0, -0.2, 0]} intensity={1.5} color="#00A4EF" />
+        <ambientLight intensity={0.9} />
+        <directionalLight position={[6, 12, 6]} intensity={2.2} castShadow />
+        <pointLight position={[-4, 4, -2]} intensity={3.8} color="#00A4EF" />
+        <pointLight position={[4, 3, 4]} intensity={2.6} color="#6366F1" />
+        <pointLight position={[0, -0.2, 0]} intensity={2.0} color="#00A4EF" />
+        <pointLight position={[0, 3.2, 0]} intensity={1.8} color="#ffffff" />
 
         <React.Suspense fallback={null}>
           <Seamless3DEnvironment />
           <AmbientParticles count={380} />
-          <Environment preset="city" />
         </React.Suspense>
       </Canvas>
 

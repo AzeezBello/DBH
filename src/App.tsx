@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SeamlessWorldCanvas } from "@/components/3d/SeamlessWorldCanvas";
+import { PhotographicRoomWalkthrough } from "@/components/spatial/PhotographicRoomWalkthrough";
 import { ElevatorLadder } from "@/components/layout/ElevatorLadder";
 import { Navbar } from "@/components/layout/Navbar";
 import { Floor01Atrium } from "@/components/sections/Floor01Atrium";
@@ -15,8 +15,8 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen bg-[#030712] text-slate-100 font-sans selection:bg-dbh-cyan/30 selection:text-dbh-cyan overflow-x-hidden">
-      {/* 1. SEAMLESS 3D WORLD CANVAS (Fixed Fullscreen from Hero to Footer) */}
-      <SeamlessWorldCanvas />
+      {/* 1. PHOTOGRAPHIC ROOM WALKTHROUGH (Real Images with Cinematic Pan & Zoom) */}
+      <PhotographicRoomWalkthrough />
 
       {/* 2. VERTICAL ELEVATOR LADDER (riseof.digital signature) */}
       <ElevatorLadder />

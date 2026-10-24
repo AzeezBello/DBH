@@ -76,14 +76,14 @@ export function Floor02Acoustics({ onOpenConsultation }: Floor02AcousticsProps) 
         >
           <div className="relative h-64 sm:h-80 rounded-xl overflow-hidden">
             <img
-              src="/img/real_ceiling.jpg"
-              alt="Real Acoustic Baffle Ceiling Installation"
+              src="/img/real_acoustics_detail.jpg"
+              alt="Real Acoustic Baffle Detail"
               className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
             <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs font-mono">
-              <span className="text-white font-semibold">Completed Installation &bull; Lagos HQ</span>
-              <span className="text-sky-300">2,400 m²</span>
+              <span className="text-white font-semibold">Macro Finish Detail &bull; Lagos HQ</span>
+              <span className="text-sky-300">Natural White Oak</span>
             </div>
           </div>
           <div className="p-4 pt-4 text-xs text-slate-400 flex items-center justify-between font-mono">

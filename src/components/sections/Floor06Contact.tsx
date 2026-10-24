@@ -1,20 +1,41 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { playFloorClick } from "@/lib/audio";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin, ExternalLink } from "lucide-react";
+import { MicrosoftLogo, AppleLogo, SedusLogo, IkeaLogo } from "@/components/ui/PartnerLogos";
 
 interface Floor06ContactProps {
   onOpenConsultation: () => void;
 }
 
-export function Floor06Contact({ onOpenConsultation }: Floor06ContactProps) {
-  const partners = [
-    { name: "Microsoft", role: "Tech Partner", logo: "/img/partners/microsoft.svg", link: "https://www.microsoft.com" },
-    { name: "Apple", role: "Hardware Partner", logo: "/img/partners/apple.svg", link: "https://www.apple.com" },
-    { name: "Sedus", role: "German Ergonomics", logo: "/img/partners/sedus.svg", link: "https://www.sedus.com" },
-    { name: "IKEA", role: "Workplace Finishes", logo: "/img/partners/ikea.svg", link: "https://www.ikea.com" },
-  ];
+const PARTNER_DATA = [
+  {
+    name: "Microsoft",
+    role: "Enterprise Technology",
+    logoComponent: <MicrosoftLogo className="h-7 w-auto" />,
+    link: "https://www.microsoft.com",
+  },
+  {
+    name: "Apple",
+    role: "Hardware & Ecosystem",
+    logoComponent: <AppleLogo className="h-7 w-auto" />,
+    link: "https://www.apple.com",
+  },
+  {
+    name: "Sedus",
+    role: "German Ergonomics",
+    logoComponent: <SedusLogo className="h-7 w-auto" />,
+    link: "https://www.sedus.com",
+  },
+  {
+    name: "IKEA",
+    role: "Workplace Finishes",
+    logoComponent: <IkeaLogo className="h-7 w-auto" />,
+    link: "https://www.ikea.com",
+  },
+];
 
+export function Floor06Contact({ onOpenConsultation }: Floor06ContactProps) {
   const handleNavJump = (hash: string) => {
     playFloorClick();
     const elem = document.querySelector(hash);
@@ -105,28 +126,40 @@ export function Floor06Contact({ onOpenConsultation }: Floor06ContactProps) {
           </div>
         </div>
 
-        {/* Global Partners Minimalist Row */}
-        <div className="pt-8 border-t border-white/10 mb-12">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">
-              CERTIFIED ECOSYSTEM PARTNERS
-            </span>
+        {/* Strategic Ecosystem Partners */}
+        <div className="pt-10 border-t border-white/10 mb-14">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 gap-3">
+            <div>
+              <span className="text-[10px] font-mono text-dbh-cyan uppercase tracking-widest block mb-1">
+                GLOBAL ALLIANCES
+              </span>
+              <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+                Our Strategic Partners
+              </h3>
+            </div>
+            <p className="text-xs text-slate-400 font-sans max-w-md">
+              We collaborate with global leaders in technology, furniture, and workplace architecture to deliver sustainable excellence.
+            </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {partners.map((p) => (
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            {PARTNER_DATA.map((p) => (
               <a
                 key={p.name}
                 href={p.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center p-4 rounded-xl bg-slate-950/40 border border-white/5 hover:border-dbh-cyan/40 backdrop-blur-md transition-all group"
+                className="group relative flex flex-col items-center justify-center p-6 h-28 rounded-2xl bg-slate-900/60 hover:bg-slate-900/90 border border-white/15 hover:border-dbh-cyan/60 backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_25px_rgba(0,164,239,0.25)] shadow-lg"
               >
-                <img
-                  src={p.logo}
-                  alt={p.name}
-                  className="h-7 max-w-[110px] object-contain filter grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all"
-                />
+                <div className="h-9 flex items-center justify-center mb-2.5 transition-transform duration-300 group-hover:scale-105">
+                  {p.logoComponent}
+                </div>
+                <span className="text-[10px] font-mono tracking-wider uppercase text-slate-400 group-hover:text-dbh-cyan transition-colors text-center">
+                  {p.role}
+                </span>
+                <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity text-dbh-cyan">
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </div>
               </a>
             ))}
           </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { playFloorClick } from "@/lib/audio";
-import { Mail, Phone, MapPin, ExternalLink, ArrowRight } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
 
 interface Floor06ContactProps {
   onOpenConsultation: () => void;
@@ -15,10 +15,18 @@ export function Floor06Contact({ onOpenConsultation }: Floor06ContactProps) {
     { name: "IKEA", role: "Workplace Finishes", logo: "/img/partners/ikea.svg", link: "https://www.ikea.com" },
   ];
 
+  const handleNavJump = (hash: string) => {
+    playFloorClick();
+    const elem = document.querySelector(hash);
+    if (elem) {
+      elem.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <section
       id="floor-06"
-      className="relative min-h-screen flex flex-col justify-between py-24 px-6 lg:px-24 pointer-events-none"
+      className="relative min-h-screen flex flex-col justify-between pt-24 pb-12 px-6 lg:px-24 pointer-events-none"
     >
       <div className="max-w-7xl mx-auto w-full pointer-events-auto">
         {/* Header */}
@@ -98,7 +106,7 @@ export function Floor06Contact({ onOpenConsultation }: Floor06ContactProps) {
         </div>
 
         {/* Global Partners Minimalist Row */}
-        <div className="pt-8 border-t border-white/10 mb-8">
+        <div className="pt-8 border-t border-white/10 mb-12">
           <div className="flex items-center justify-between mb-4">
             <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">
               CERTIFIED ECOSYSTEM PARTNERS
@@ -123,15 +131,97 @@ export function Floor06Contact({ onOpenConsultation }: Floor06ContactProps) {
             ))}
           </div>
         </div>
+
+        {/* Footer Editorial Directory */}
+        <div className="pt-10 pb-8 border-t border-white/10 grid grid-cols-1 md:grid-cols-4 gap-8 text-xs font-mono">
+          <div>
+            <span className="text-[11px] font-bold text-white uppercase tracking-wider block mb-3">
+              DBH Solutions
+            </span>
+            <p className="text-slate-400 leading-relaxed font-sans text-xs">
+              Specialized workspace engineering, mission-critical financial dealing rooms, and turnkey architectural fitouts across West Africa.
+            </p>
+          </div>
+
+          <div>
+            <span className="text-[11px] font-bold text-white uppercase tracking-wider block mb-3">
+              Products
+            </span>
+            <ul className="space-y-2 text-slate-400">
+              <li>
+                <button onClick={() => handleNavJump("#floor-02")} className="hover:text-dbh-cyan transition-colors">
+                  Acoustic Baffle Ceilings
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleNavJump("#floor-02")} className="hover:text-dbh-cyan transition-colors">
+                  Sound Absorption Systems
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleNavJump("#floor-04")} className="hover:text-dbh-cyan transition-colors">
+                  Sedus Ergonomic Seating
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleNavJump("#floor-04")} className="hover:text-dbh-cyan transition-colors">
+                  Demountable Glass Walls
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <span className="text-[11px] font-bold text-white uppercase tracking-wider block mb-3">
+              Solutions &amp; Services
+            </span>
+            <ul className="space-y-2 text-slate-400">
+              <li>
+                <button onClick={() => handleNavJump("#floor-03")} className="hover:text-emerald-400 transition-colors">
+                  Financial Dealing Rooms
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleNavJump("#floor-03")} className="hover:text-emerald-400 transition-colors">
+                  High-Frequency Trading Desks
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleNavJump("#floor-04")} className="hover:text-amber-400 transition-colors">
+                  Turnkey Workspace Fitouts
+                </button>
+              </li>
+              <li>
+                <button onClick={() => handleNavJump("#floor-04")} className="hover:text-amber-400 transition-colors">
+                  Acoustic &amp; MEP Consultancy
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <span className="text-[11px] font-bold text-white uppercase tracking-wider block mb-3">
+              Headquarters
+            </span>
+            <address className="not-italic text-slate-400 space-y-1">
+              <p className="text-white">25B Sanusi Fafunwa</p>
+              <p>Victoria Island, Lagos</p>
+              <p className="text-dbh-cyan">info@dbhsolutions.com</p>
+              <p className="text-emerald-400">+234 (1) 453 6681</p>
+            </address>
+          </div>
+        </div>
       </div>
 
       {/* Footer Legal Strip */}
       <div className="max-w-7xl mx-auto w-full pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between text-[11px] font-mono text-slate-500 pointer-events-auto">
-        <span>&copy; {new Date().getFullYear()} DBH SOLUTIONS LIMITED</span>
+        <span>&copy; {new Date().getFullYear()} DBH SOLUTIONS LIMITED. ALL RIGHTS RESERVED.</span>
         <div className="flex items-center gap-6 mt-2 sm:mt-0">
           <a href="#" className="hover:text-slate-300">PRIVACY</a>
           <a href="#" className="hover:text-slate-300">TERMS</a>
-          <a href="#floor-01" className="text-dbh-cyan hover:underline">BACK TO LEVEL 01 &uarr;</a>
+          <button onClick={() => handleNavJump("#floor-01")} className="text-dbh-cyan hover:underline">
+            BACK TO TOP &uarr;
+          </button>
         </div>
       </div>
     </section>

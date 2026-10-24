@@ -36,7 +36,7 @@ export function Floor03DealingRooms({ onOpenConsultation }: Floor03DealingRoomsP
           </div>
           <div className="p-4 pt-4 text-xs text-slate-400 flex items-center justify-between font-mono">
             <span>REAL PHOTO // DEALING DESKS</span>
-            <span className="text-emerald-400">INSPECT 3D CONSOLE</span>
+            <span className="text-emerald-400">MISSION-CRITICAL TRADING CONSOLES</span>
           </div>
         </motion.div>
 

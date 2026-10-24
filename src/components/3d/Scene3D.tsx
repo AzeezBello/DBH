@@ -52,7 +52,7 @@ export function Scene3D({
       {/* Floating 3D Interaction Badge */}
       <div className="absolute bottom-4 left-4 pointer-events-none z-10 flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-950/70 border border-white/10 backdrop-blur-md text-xs text-slate-300">
         <span className="w-2 h-2 rounded-full bg-dbh-cyan animate-pulse" />
-        <span>Drag to orbit 3D space • Click hotspots to inspect</span>
+        <span>Drag to orbit model • Click hotspots to inspect</span>
       </div>
     </div>
   );

@@ -88,7 +88,7 @@ export function Floor02Acoustics({ onOpenConsultation }: Floor02AcousticsProps) 
           </div>
           <div className="p-4 pt-4 text-xs text-slate-400 flex items-center justify-between font-mono">
             <span>REAL PHOTO // ACOUSTIC CEILINGS</span>
-            <span className="text-sky-400">LOOK UP IN 3D SPACE</span>
+            <span className="text-sky-400">ARCHITECTURAL ACOUSTIC SYSTEMS</span>
           </div>
         </motion.div>
       </div>

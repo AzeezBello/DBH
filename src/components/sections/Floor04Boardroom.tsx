@@ -88,7 +88,7 @@ export function Floor04Boardroom({ onOpenConsultation }: Floor04BoardroomProps) 
           </div>
           <div className="p-4 pt-4 text-xs text-slate-400 flex items-center justify-between font-mono">
             <span>REAL PHOTO // BOARDROOM SUITE</span>
-            <span className="text-amber-400">SMART GLASS IN 3D</span>
+            <span className="text-amber-400">EXECUTIVE BOARDROOM ARCHITECTURE</span>
           </div>
         </motion.div>
       </div>

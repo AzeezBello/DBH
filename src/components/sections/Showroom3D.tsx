@@ -13,7 +13,7 @@ interface Showroom3DProps {
 
 export function Showroom3D({ onOpenConsultation, activeFocus, onSelectFocus }: Showroom3DProps) {
   const tabs = [
-    { id: "all", label: "Full 3D Space", badge: "Overview" },
+    { id: "all", label: "Full Overview", badge: "Overview" },
     { id: "products", label: "Acoustics & Ceilings", badge: "dB Reduction" },
     { id: "solutions", label: "Financial Dealing Rooms", badge: "Trading" },
     { id: "services", label: "Executive Interiors", badge: "Turnkey" },

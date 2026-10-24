@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import { SeamlessWorldCanvas } from "@/components/3d/SeamlessWorldCanvas";
+import { SpatialHUD } from "@/components/layout/SpatialHUD";
 import { Navbar } from "@/components/layout/Navbar";
 import { Hero } from "@/components/sections/Hero";
-import { Showroom3D } from "@/components/sections/Showroom3D";
 import { Pillars } from "@/components/sections/Pillars";
 import { ProjectsShowcase } from "@/components/sections/ProjectsShowcase";
 import { Partners } from "@/components/sections/Partners";
@@ -10,54 +11,43 @@ import { ConsultationModal } from "@/components/sections/ConsultationModal";
 
 export default function App() {
   const [isConsultationOpen, setIsConsultationOpen] = useState(false);
-  const [activeFocus, setActiveFocus] = useState<"all" | "products" | "solutions" | "services">("all");
 
-  const handleSelectHotspot = (type: "products" | "solutions" | "services") => {
-    setActiveFocus(type);
-    const showroomElem = document.getElementById("showroom");
-    if (showroomElem) {
-      showroomElem.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
-  const handleExploreShowroom = () => {
-    const showroomElem = document.getElementById("showroom");
-    if (showroomElem) {
-      showroomElem.scrollIntoView({ behavior: "smooth" });
+  const handleScrollToSection = (id: string) => {
+    const el = document.querySelector(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   return (
-    <div className="relative min-h-screen bg-[#020713] text-slate-100 flex flex-col font-sans selection:bg-dbh-cyan/30 selection:text-dbh-cyan">
-      {/* Subtle Noise Texture for high-taste depth */}
+    <div className="relative min-h-screen bg-transparent text-slate-100 font-sans selection:bg-dbh-cyan/30 selection:text-dbh-cyan overflow-x-hidden">
+      {/* 1. SEAMLESS PERSISTENT 3D WORLD CANVAS (Spans entire page from Hero to Footer) */}
+      <SeamlessWorldCanvas />
+
+      {/* 2. REAL-TIME 3D SPATIAL TELEMETRY HUD */}
+      <SpatialHUD />
+
+      {/* 3. Subtle Film Grain Texture */}
       <div className="noise-overlay" />
 
-      {/* Floating Navigation Header */}
+      {/* 4. Floating Frosted Glass Navigation Header */}
       <Navbar onOpenConsultation={() => setIsConsultationOpen(true)} />
 
-      {/* Main Content Sections */}
-      <main className="flex-1">
-        {/* Hero Section with Live 3D Scene */}
+      {/* 5. Translucent Content Sections Floating Seamlessly in 3D Space */}
+      <main className="relative z-10">
+        {/* Hero Section */}
         <Hero
           onOpenConsultation={() => setIsConsultationOpen(true)}
-          onExploreShowroom={handleExploreShowroom}
-          onSelectHotspot={handleSelectHotspot}
+          onExploreSection={handleScrollToSection}
         />
 
-        {/* Dedicated 3D Spatial Showroom & Configurator */}
-        <Showroom3D
-          activeFocus={activeFocus}
-          onSelectFocus={setActiveFocus}
-          onOpenConsultation={() => setIsConsultationOpen(true)}
-        />
-
-        {/* Core Pillars: Products, Solutions, Services */}
+        {/* Core Pillars: Products, Solutions, Services (3D Spotlight & Tilt Cards) */}
         <Pillars
           onOpenConsultation={() => setIsConsultationOpen(true)}
-          onSelectFocus={handleSelectHotspot}
+          onSelectFocus={(type) => handleScrollToSection(`#${type}`)}
         />
 
-        {/* Real Projects & Case Studies (High-Res Architectural Photography) */}
+        {/* Real Projects & Case Studies (High-Resolution Architectural Photography) */}
         <ProjectsShowcase
           onOpenConsultation={() => setIsConsultationOpen(true)}
         />
@@ -66,10 +56,12 @@ export default function App() {
         <Partners />
       </main>
 
-      {/* Interactive Map & Contact Footer */}
-      <Footer />
+      {/* 6. Translucent Footer with Interactive Map */}
+      <div className="relative z-10">
+        <Footer />
+      </div>
 
-      {/* Consultation Modal Dialog */}
+      {/* 7. Consultation Booking Dialog */}
       <ConsultationModal
         isOpen={isConsultationOpen}
         onClose={() => setIsConsultationOpen(false)}

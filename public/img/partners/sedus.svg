@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 60" width="170" height="60">
+  <g transform="translate(10, 14)">
+    <circle cx="16" cy="16" r="14" fill="none" stroke="#002B54" stroke-width="3.5"/>
+    <circle cx="16" cy="16" r="6" fill="#002B54"/>
+    <text x="42" y="24" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="24" font-weight="700" fill="#002B54" letter-spacing="2">sedus</text>
+  </g>
+</svg>

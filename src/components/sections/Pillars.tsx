@@ -18,7 +18,7 @@ export function Pillars({ onOpenConsultation, onSelectFocus }: PillarsProps) {
       subtitle: "Acoustic Ceilings & Ergonomics",
       description:
         "High-performance architectural ceiling systems, acoustic baffles, and German-engineered ergonomic task seating tailored for contemporary corporate headquarters.",
-      image: "/img/ceiling.svg",
+      image: "/img/real_ceiling.jpg",
       icon: Volume2,
       badge: "Architectural Acoustics",
       badgeVariant: "cyan" as const,
@@ -35,7 +35,7 @@ export function Pillars({ onOpenConsultation, onSelectFocus }: PillarsProps) {
       subtitle: "Financial Dealing Rooms",
       description:
         "Specialized trading floor environments, multi-screen consoles, mission-critical power redundancies, and low-latency financial technologies for banks and brokerages.",
-      image: "/img/dealing-room.svg",
+      image: "/img/real_trading_floor.jpg",
       icon: MonitorCheck,
       badge: "Trading Floor Tech",
       badgeVariant: "success" as const,
@@ -52,7 +52,7 @@ export function Pillars({ onOpenConsultation, onSelectFocus }: PillarsProps) {
       subtitle: "Workspace Consultancy & Turnkey",
       description:
         "Comprehensive workplace strategy, architectural design, MEP engineering, and certified project delivery executed across major Nigerian business hubs.",
-      image: "/img/office.svg",
+      image: "/img/real_executive_office.jpg",
       icon: HardHat,
       badge: "Turnkey Project Delivery",
       badgeVariant: "gold" as const,
@@ -87,19 +87,19 @@ export function Pillars({ onOpenConsultation, onSelectFocus }: PillarsProps) {
             const Icon = pillar.icon;
             return (
               <div key={pillar.id} id={pillar.id}>
-                <TiltCard tiltIntensity={8}>
+                <TiltCard tiltIntensity={7}>
                   <SpotlightCard className="h-full flex flex-col justify-between p-7 border-white/15 bg-slate-900/70">
                     <div>
-                      {/* Visual Header */}
-                      <div className="relative h-56 rounded-xl overflow-hidden mb-6 border border-white/10 group-hover:border-dbh-cyan/40 transition-colors">
+                      {/* Real Photography Header */}
+                      <div className="relative h-60 rounded-xl overflow-hidden mb-6 border border-white/10 group-hover:border-dbh-cyan/50 transition-colors shadow-lg">
                         <img
                           src={pillar.image}
                           alt={pillar.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/25 to-transparent" />
                         <div className="absolute top-3 left-3">
-                          <Badge variant={pillar.badgeVariant} className="backdrop-blur-md">
+                          <Badge variant={pillar.badgeVariant} className="backdrop-blur-md shadow-md">
                             {pillar.badge}
                           </Badge>
                         </div>
@@ -140,7 +140,7 @@ export function Pillars({ onOpenConsultation, onSelectFocus }: PillarsProps) {
                         onClick={() => onSelectFocus(pillar.id as any)}
                         className="w-full text-xs font-semibold gap-1.5 hover:text-dbh-cyan"
                       >
-                        <span>View 3D Model</span>
+                        <span>Inspect in 3D</span>
                         <ArrowRight className="w-3.5 h-3.5" />
                       </Button>
                       <Button

@@ -3,6 +3,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Hero } from "@/components/sections/Hero";
 import { Showroom3D } from "@/components/sections/Showroom3D";
 import { Pillars } from "@/components/sections/Pillars";
+import { ProjectsShowcase } from "@/components/sections/ProjectsShowcase";
 import { Partners } from "@/components/sections/Partners";
 import { Footer } from "@/components/layout/Footer";
 import { ConsultationModal } from "@/components/sections/ConsultationModal";
@@ -50,10 +51,15 @@ export default function App() {
           onOpenConsultation={() => setIsConsultationOpen(true)}
         />
 
-        {/* Products, Solutions, Services (3D Tilt & Spotlight Cards) */}
+        {/* Core Pillars: Products, Solutions, Services */}
         <Pillars
           onOpenConsultation={() => setIsConsultationOpen(true)}
           onSelectFocus={handleSelectHotspot}
+        />
+
+        {/* Real Projects & Case Studies (High-Res Architectural Photography) */}
+        <ProjectsShowcase
+          onOpenConsultation={() => setIsConsultationOpen(true)}
         />
 
         {/* Global Strategic Partners */}

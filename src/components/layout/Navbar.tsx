@@ -26,6 +26,7 @@ export function Navbar({ onOpenConsultation }: NavbarProps) {
     { label: "Products", href: "#products" },
     { label: "Solutions", href: "#solutions" },
     { label: "Services", href: "#services" },
+    { label: "Projects", href: "#case-studies" },
     { label: "Partners", href: "#partners" },
     { label: "Contact", href: "#contact" },
   ];

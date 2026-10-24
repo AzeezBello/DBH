@@ -12,35 +12,51 @@ import { ConsultationModal } from "@/components/sections/ConsultationModal";
 
 export default function App() {
   const [isConsultationOpen, setIsConsultationOpen] = useState(false);
+  const [selectedDomain, setSelectedDomain] = useState("dealing-room");
+  const [selectedNote, setSelectedNote] = useState("");
+
+  const handleOpenConsultation = (defaultDomain?: string, defaultNote?: string) => {
+    if (defaultDomain) {
+      setSelectedDomain(defaultDomain);
+    }
+    if (defaultNote !== undefined) {
+      setSelectedNote(defaultNote);
+    }
+    setIsConsultationOpen(true);
+  };
 
   return (
     <div className="relative min-h-screen bg-[#030712] text-slate-100 font-sans selection:bg-dbh-cyan/30 selection:text-dbh-cyan overflow-x-hidden">
-      {/* 1. PHOTOGRAPHIC ROOM WALKTHROUGH (Real Images with Cinematic Pan & Zoom) */}
+      {/* 1. PHOTOGRAPHIC ROOM WALKTHROUGH (Real Images with Cinematic Pan, Zoom & Deep Hotspot Focus) */}
       <PhotographicRoomWalkthrough />
 
-      {/* 2. VERTICAL ELEVATOR LADDER (riseof.digital signature) */}
+      {/* 2. VERTICAL ELEVATOR LADDER (with Step Controls & Keyboard Support) */}
       <ElevatorLadder />
 
       {/* 3. SUBTLE FILM GRAIN */}
       <div className="noise-overlay" />
 
       {/* 4. PRISTINE TOP BAR */}
-      <Navbar onOpenConsultation={() => setIsConsultationOpen(true)} />
+      <Navbar onOpenConsultation={() => handleOpenConsultation("dealing-room", "")} />
 
       {/* 5. 6 IMMERSIVE ARCHITECTURAL FLOORS */}
       <main className="relative z-10">
-        <Floor01Atrium onOpenConsultation={() => setIsConsultationOpen(true)} />
-        <Floor02Acoustics onOpenConsultation={() => setIsConsultationOpen(true)} />
-        <Floor03DealingRooms onOpenConsultation={() => setIsConsultationOpen(true)} />
-        <Floor04Boardroom onOpenConsultation={() => setIsConsultationOpen(true)} />
-        <Floor05Portfolio onOpenConsultation={() => setIsConsultationOpen(true)} />
-        <Floor06Contact onOpenConsultation={() => setIsConsultationOpen(true)} />
+        <Floor01Atrium onOpenConsultation={() => handleOpenConsultation("dealing-room", "")} />
+        <Floor02Acoustics onOpenConsultation={(domain) => handleOpenConsultation(domain, "")} />
+        <Floor03DealingRooms onOpenConsultation={(domain) => handleOpenConsultation(domain, "")} />
+        <Floor04Boardroom onOpenConsultation={(domain) => handleOpenConsultation(domain, "")} />
+        <Floor05Portfolio
+          onOpenConsultation={(domain, note) => handleOpenConsultation(domain, note)}
+        />
+        <Floor06Contact onOpenConsultation={() => handleOpenConsultation("turnkey", "")} />
       </main>
 
-      {/* 6. CONSULTATION BOOKING MODAL */}
+      {/* 6. CONSULTATION BOOKING & INSTANT SPEC CALCULATOR MODAL */}
       <ConsultationModal
         isOpen={isConsultationOpen}
         onClose={() => setIsConsultationOpen(false)}
+        initialDomain={selectedDomain}
+        initialNote={selectedNote}
       />
     </div>
   );

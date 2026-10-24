@@ -4,7 +4,7 @@ import { playFloorClick } from "@/lib/audio";
 import { MonitorCheck, ArrowRight } from "lucide-react";
 
 interface Floor03DealingRoomsProps {
-  onOpenConsultation: () => void;
+  onOpenConsultation: (defaultDomain?: string) => void;
 }
 
 export function Floor03DealingRooms({ onOpenConsultation }: Floor03DealingRoomsProps) {
@@ -83,9 +83,9 @@ export function Floor03DealingRooms({ onOpenConsultation }: Floor03DealingRoomsP
           <button
             onClick={() => {
               playFloorClick();
-              onOpenConsultation();
+              onOpenConsultation("dealing-room");
             }}
-            className="flex items-center gap-2 px-6 py-3 rounded-full bg-emerald-400 text-slate-950 font-semibold text-xs tracking-wider uppercase hover:bg-emerald-300 transition-all shadow-[0_0_20px_rgba(16,185,129,0.35)]"
+            className="flex items-center gap-2 px-6 py-3 rounded-full bg-emerald-400 text-slate-950 font-semibold text-xs tracking-wider uppercase hover:bg-emerald-300 transition-all shadow-[0_0_20px_rgba(16,185,129,0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
           >
             <span>Inquire Dealing Rooms</span>
             <ArrowRight className="w-3.5 h-3.5" />

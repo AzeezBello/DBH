@@ -1,13 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { playFloorClick } from "@/lib/audio";
-import { HardHat, ArrowRight } from "lucide-react";
+import { playFloorClick, playSmartGlassSwitch } from "@/lib/audio";
+import { ArrowRight, Eye, EyeOff, ShieldCheck } from "lucide-react";
 
 interface Floor04BoardroomProps {
-  onOpenConsultation: () => void;
+  onOpenConsultation: (defaultDomain?: string) => void;
 }
 
 export function Floor04Boardroom({ onOpenConsultation }: Floor04BoardroomProps) {
+  const [isGlassFrosted, setIsGlassFrosted] = useState(false);
+
+  const handleToggleGlass = () => {
+    const nextState = !isGlassFrosted;
+    setIsGlassFrosted(nextState);
+    playSmartGlassSwitch(nextState);
+  };
+
   return (
     <section
       id="floor-04"
@@ -38,10 +46,10 @@ export function Floor04Boardroom({ onOpenConsultation }: Floor04BoardroomProps) 
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8 max-w-lg">
             {[
               { label: "Ergonomics Partner", val: "Sedus (Germany)" },
-              { label: "Glass Partitions", val: "Electrochromic Switch" },
+              { label: "Glass Partitions", val: "Electrochromic PDLC" },
               { label: "Acoustic Attenuation", val: "Rw 48 dB Sound Stop" },
               { label: "Delivery Model", val: "EPC Turnkey Execution" },
-              { label: "MEP Integration", val: "HVAC &amp; Data Cabling" },
+              { label: "MEP Integration", val: "HVAC & Data Cabling" },
               { label: "Certification", val: "ISO 9001 / BIFMA" },
             ].map((spec, i) => (
               <div
@@ -57,38 +65,90 @@ export function Floor04Boardroom({ onOpenConsultation }: Floor04BoardroomProps) 
           <button
             onClick={() => {
               playFloorClick();
-              onOpenConsultation();
+              onOpenConsultation("turnkey");
             }}
-            className="flex items-center gap-2 px-6 py-3 rounded-full bg-white text-slate-950 font-semibold text-xs tracking-wider uppercase hover:bg-amber-400 hover:text-white transition-all shadow-[0_0_20px_rgba(255,255,255,0.15)]"
+            className="flex items-center gap-2 px-6 py-3 rounded-full bg-white text-slate-950 font-semibold text-xs tracking-wider uppercase hover:bg-amber-400 hover:text-white transition-all shadow-[0_0_20px_rgba(255,255,255,0.15)] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
           >
             <span>Inquire Turnkey Fitouts</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </motion.div>
 
-        {/* Right Column: Real Boardroom Photo */}
+        {/* Right Column: Real Boardroom Photo + Interactive Smart Glass Switcher */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="lg:col-span-5 relative rounded-2xl overflow-hidden border border-white/15 bg-slate-950/60 backdrop-blur-xl p-4 shadow-2xl"
+          className="lg:col-span-5 relative rounded-2xl overflow-hidden border border-white/15 bg-slate-950/75 backdrop-blur-2xl p-4 shadow-2xl"
         >
-          <div className="relative h-64 sm:h-80 rounded-xl overflow-hidden">
+          <div className="relative h-60 sm:h-72 rounded-xl overflow-hidden mb-4">
             <img
               src="/img/real_boardroom.jpg"
               alt="Real Executive Boardroom Installation"
-              className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+              className="w-full h-full object-cover transition-transform duration-700"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-            <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs font-mono">
+
+            {/* Simulated PDLC Smart Glass Partition Layer */}
+            <div
+              className={`absolute inset-0 transition-all duration-150 flex flex-col items-center justify-center p-6 text-center ${
+                isGlassFrosted
+                  ? "backdrop-blur-xl bg-slate-100/20 opacity-100"
+                  : "backdrop-blur-none bg-transparent opacity-0 pointer-events-none"
+              }`}
+            >
+              <div className="p-3 rounded-full bg-slate-950/80 border border-amber-400/50 text-amber-400 mb-2 shadow-xl">
+                <ShieldCheck className="w-6 h-6" />
+              </div>
+              <span className="text-xs font-mono font-bold uppercase tracking-widest text-white bg-slate-950/85 px-3 py-1 rounded-full border border-white/15">
+                PDLC PRIVACY ACTIVE &bull; 98% OPACITY
+              </span>
+              <span className="text-[11px] font-mono text-slate-200 mt-1.5 bg-slate-950/70 px-2.5 py-0.5 rounded">
+                Rw 48dB Acoustic Seal Engaged
+              </span>
+            </div>
+
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs font-mono pointer-events-none">
               <span className="text-white font-semibold">Executive Boardroom &bull; Abuja FCT</span>
-              <span className="text-amber-300">Turnkey Fitout</span>
+              <span className="text-amber-300">
+                {isGlassFrosted ? "FROSTED STATE" : "CRYSTAL CLEAR"}
+              </span>
             </div>
           </div>
-          <div className="p-4 pt-4 text-xs text-slate-400 flex items-center justify-between font-mono">
-            <span>REAL PHOTO // BOARDROOM SUITE</span>
-            <span className="text-amber-400">EXECUTIVE BOARDROOM ARCHITECTURE</span>
+
+          {/* Interactive Electrochromic Switcher Control */}
+          <div className="p-3.5 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-between gap-4">
+            <div>
+              <span className="text-[10px] font-mono text-amber-400 uppercase tracking-wider font-semibold block">
+                SMART PARTITION DEMO
+              </span>
+              <span className="text-xs text-slate-300 font-mono">
+                {isGlassFrosted ? "Opaque Boardroom Mode" : "Transparent Open Mode"}
+              </span>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleToggleGlass}
+              className={`px-4 py-2 rounded-full text-xs font-mono font-semibold uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer ${
+                isGlassFrosted
+                  ? "bg-amber-400 text-slate-950 shadow-[0_0_20px_rgba(251,191,36,0.4)]"
+                  : "bg-white/10 hover:bg-white/20 text-white border border-white/15"
+              }`}
+            >
+              {isGlassFrosted ? (
+                <>
+                  <Eye className="w-3.5 h-3.5" />
+                  <span>Clear Glass</span>
+                </>
+              ) : (
+                <>
+                  <EyeOff className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Frost Glass</span>
+                </>
+              )}
+            </button>
           </div>
         </motion.div>
       </div>

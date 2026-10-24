@@ -1,14 +1,15 @@
-import React, { useEffect, useRef, useState, useMemo } from "react";
-import { playFloorClick } from "@/lib/audio";
-import { Sparkles, Eye, Info, CheckCircle2 } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
+import { playFloorClick, playSwoosh } from "@/lib/audio";
+import { Maximize2, Minimize2, X } from "lucide-react";
 
-interface Hotspot {
+export interface Hotspot {
   id: string;
   top: string;
   left: string;
   title: string;
   detail: string;
   tag: string;
+  metric: string;
 }
 
 interface RoomConfig {
@@ -20,7 +21,7 @@ interface RoomConfig {
   camera: {
     startScale: number;
     endScale: number;
-    startX: number; // percentage
+    startX: number;
     endX: number;
     startY: number;
     endY: number;
@@ -48,19 +49,21 @@ const ROOMS: RoomConfig[] = [
     hotspots: [
       {
         id: "h1-1",
-        top: "42%",
-        left: "35%",
-        title: "Double-Height Architectural Glazing",
-        detail: "Low-E acoustic glass facades minimizing thermal transfer and street noise.",
+        top: "40%",
+        left: "36%",
+        title: "Double-Height Acoustic Glazing",
+        detail: "Low-E laminated glass facade engineered to block 46dB of external urban traffic noise while maximizing daylight harvesting.",
         tag: "ACOUSTIC FACADE",
+        metric: "Rw 46 dB Attenuation",
       },
       {
         id: "h1-2",
-        top: "68%",
-        left: "68%",
+        top: "66%",
+        left: "66%",
         title: "Executive Collaborative Lounge",
-        detail: "Bespoke reception seating engineered for corporate welcoming.",
+        detail: "Bespoke European reception seating and modular acoustic zoning tailored for Tier-1 institutional headquarters.",
         tag: "INTERIOR ARCHITECTURE",
+        metric: "BIFMA Certified",
       },
     ],
   },
@@ -82,19 +85,21 @@ const ROOMS: RoomConfig[] = [
     hotspots: [
       {
         id: "h2-1",
-        top: "28%",
+        top: "30%",
         left: "48%",
         title: "Micro-Perforated Oak Baffles",
-        detail: "NRC 0.88+ reverberation control with concealed sound absorption cores.",
-        tag: "NRC 0.88+",
+        detail: "High-density PET acoustic core wrapped in natural white oak veneer, reducing open-office reverberation to 0.32 seconds.",
+        tag: "NRC 0.88+ ABSORPTION",
+        metric: "RT60: 0.32s",
       },
       {
         id: "h2-2",
         top: "52%",
-        left: "72%",
+        left: "70%",
         title: "Recessed 4000K Linear LEDs",
-        detail: "Continuous architectural lighting channels integrated flush with baffle grid.",
+        detail: "Glare-free UGR<16 continuous architectural lighting channels integrated flush within the modular baffle tracks.",
         tag: "LIGHTING INTEGRATION",
+        metric: "4000K CRI 92+",
       },
     ],
   },
@@ -116,19 +121,21 @@ const ROOMS: RoomConfig[] = [
     hotspots: [
       {
         id: "h3-1",
-        top: "45%",
-        left: "32%",
+        top: "44%",
+        left: "34%",
         title: "Multi-Screen Trader Consoles",
-        detail: "Continuous curved display arms supporting up to 6 ultra-wide financial feeds.",
-        tag: "24/7 TRADING DESK",
+        detail: "Zero-wobble extruded aluminum parabolic monitor bridges supporting up to 6 ultra-wide Bloomberg/Refinitiv feeds per trader.",
+        tag: "24/7 DEALING DESK",
+        metric: "6x 49\" Display Capacity",
       },
       {
         id: "h3-2",
-        top: "70%",
+        top: "68%",
         left: "58%",
         title: "Dual-Feed A+B UPS Infrastructure",
-        detail: "Zero-latency failover power routing under anti-static raised access flooring.",
+        detail: "Isolated power & Cat6A fiber pathways with active silent thermal extraction under raised access flooring.",
         tag: "POWER REDUNDANCY",
+        metric: "99.999% Uptime SLA",
       },
     ],
   },
@@ -151,18 +158,20 @@ const ROOMS: RoomConfig[] = [
       {
         id: "h4-1",
         top: "38%",
-        left: "28%",
+        left: "30%",
         title: "Electrochromic Smart Glass",
-        detail: "Instant privacy switching from crystal clear to opaque with Rw 48dB sound barrier.",
+        detail: "PDLC liquid-crystal partition wall that transitions from crystal clear to privacy frosted in under 80 milliseconds.",
         tag: "SMART PRIVACY",
+        metric: "< 80ms Switch Speed",
       },
       {
         id: "h4-2",
         top: "62%",
-        left: "55%",
+        left: "56%",
         title: "German Sedus Task Seating",
-        detail: "Precision ergonomic lumbar support engineered for prolonged executive sessions.",
+        detail: "Precision kinematic spine support with synchronized weight-activated tilt for prolonged executive boardroom sessions.",
         tag: "SEDUS ERGONOMICS",
+        metric: "DIN EN 1335 Certified",
       },
     ],
   },
@@ -174,7 +183,7 @@ const ROOMS: RoomConfig[] = [
     image: "/img/real_ergonomics.jpg",
     camera: {
       startScale: 1.05,
-      endScale: 1.20,
+      endScale: 1.2,
       startX: 2,
       endX: -2,
       startY: 0,
@@ -185,10 +194,11 @@ const ROOMS: RoomConfig[] = [
       {
         id: "h5-1",
         top: "50%",
-        left: "44%",
-        title: "Turnkey Enterprise Seating",
-        detail: "Certified deployments across Tier-1 Nigerian financial institutions.",
+        left: "45%",
+        title: "Turnkey Enterprise Ergonomics",
+        detail: "Complete delivery of 320+ German ergonomic workstations and sit-stand desks across West African corporate headquarters.",
         tag: "TURNKEY INSTALLATION",
+        metric: "250+ Deployments",
       },
     ],
   },
@@ -210,11 +220,12 @@ const ROOMS: RoomConfig[] = [
     hotspots: [
       {
         id: "h6-1",
-        top: "55%",
+        top: "54%",
         left: "50%",
-        title: "DBH Operational Center",
-        detail: "25B Sanusi Fafunwa, Victoria Island — Central engineering and warehouse hub.",
+        title: "DBH Engineering & Design Hub",
+        detail: "25B Sanusi Fafunwa, Victoria Island — Housing our acoustic testing laboratory, mock-up showroom, and project engineers.",
         tag: "VICTORIA ISLAND HQ",
+        metric: "Lagos, Nigeria",
       },
     ],
   },
@@ -222,16 +233,16 @@ const ROOMS: RoomConfig[] = [
 
 export function PhotographicRoomWalkthrough() {
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [activeHotspot, setActiveHotspot] = useState<Hotspot | null>(null);
+  const [focusedHotspot, setFocusedHotspot] = useState<Hotspot | null>(null);
 
   // Smooth lerp values for Steadicam feel
   const currentScrollRef = useRef(0);
   const targetScrollRef = useRef(0);
+  const lastRoomIndexRef = useRef(0);
 
   const mouseRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
   const [renderedMouse, setRenderedMouse] = useState({ x: 0, y: 0 });
 
-  // Update target scroll on scroll event
   useEffect(() => {
     const handleScroll = () => {
       const scrollMax = document.documentElement.scrollHeight - window.innerHeight;
@@ -246,18 +257,32 @@ export function PhotographicRoomWalkthrough() {
       mouseRef.current.targetY = y;
     };
 
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setFocusedHotspot(null);
+      }
+    };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    window.addEventListener("keydown", handleKeyDown);
 
-    // 60FPS fluid physics loop with smooth damping
     let animationFrameId: number;
     const updatePhysics = () => {
-      // Lerp scroll progress (smooth camera glide)
       const scrollDelta = targetScrollRef.current - currentScrollRef.current;
       currentScrollRef.current += scrollDelta * 0.085;
       setScrollProgress(currentScrollRef.current);
 
-      // Lerp mouse parallax
+      // Clear focus zoom if user scrolls into a different room
+      const currentRoomIdx = Math.min(
+        Math.floor(currentScrollRef.current * ROOMS.length),
+        ROOMS.length - 1
+      );
+      if (currentRoomIdx !== lastRoomIndexRef.current) {
+        lastRoomIndexRef.current = currentRoomIdx;
+        setFocusedHotspot(null);
+      }
+
       const mouseDeltaX = mouseRef.current.targetX - mouseRef.current.x;
       const mouseDeltaY = mouseRef.current.targetY - mouseRef.current.y;
       mouseRef.current.x += mouseDeltaX * 0.05;
@@ -272,72 +297,88 @@ export function PhotographicRoomWalkthrough() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("keydown", handleKeyDown);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
 
-  // Compute active room index based on smooth progress
   const numRooms = ROOMS.length;
   const activeRoomIndex = Math.min(
     Math.floor(scrollProgress * numRooms),
     numRooms - 1
   );
 
+  const handleToggleHotspot = (hs: Hotspot) => {
+    if (focusedHotspot?.id === hs.id) {
+      playFloorClick();
+      setFocusedHotspot(null);
+    } else {
+      playSwoosh();
+      setFocusedHotspot(hs);
+    }
+  };
+
   return (
     <div
       className="fixed inset-0 w-screen h-screen z-0 pointer-events-none select-none overflow-hidden bg-[#020713]"
       aria-hidden="true"
     >
-      {/* 1. ROOM PHOTOGRAPHY STACK WITH SPATIAL CAMERA PAN & ZOOM */}
+      {/* 1. ROOM PHOTOGRAPHY STACK WITH SPATIAL CAMERA PAN, ZOOM & HOTSPOT FOCUS */}
       {ROOMS.map((room, idx) => {
-        // Calculate room's scroll slice [startP, endP]
         const roomSlice = 1 / numRooms;
         const startP = idx * roomSlice;
         const endP = (idx + 1) * roomSlice;
 
-        // Local progress within this room [0, 1]
-        let localT = (scrollProgress - startP) / roomSlice;
+        const localT = (scrollProgress - startP) / roomSlice;
 
-        // Opacity transition window with smooth easing
         let opacity = 0;
-        const fadePadding = 0.22; // smooth cross-fade overlap
+        const fadePadding = 0.22;
 
         if (scrollProgress >= startP - fadePadding && scrollProgress <= endP + fadePadding) {
           if (scrollProgress < startP) {
-            // Fading in
             const f = (scrollProgress - (startP - fadePadding)) / fadePadding;
             opacity = f * f * (3 - 2 * f);
           } else if (scrollProgress > endP) {
-            // Fading out
-            const f = ((endP + fadePadding) - scrollProgress) / fadePadding;
+            const f = (endP + fadePadding - scrollProgress) / fadePadding;
             opacity = Math.max(f * f * (3 - 2 * f), 0);
           } else {
-            // Fully active room
             opacity = 1;
           }
         }
 
-        // Camera Pan & Zoom Calculations
+        if (opacity <= 0.001) {
+          return null;
+        }
+
         const clampedT = Math.min(Math.max(localT, 0), 1);
         const smoothT = clampedT * clampedT * (3 - 2 * clampedT);
 
-        const currentScale =
+        // Check if a hotspot in this room is currently locked for Deep Focus Zoom
+        const activeRoomHotspot =
+          focusedHotspot && room.hotspots.some((h) => h.id === focusedHotspot.id)
+            ? focusedHotspot
+            : null;
+
+        let targetScale =
           room.camera.startScale +
           (room.camera.endScale - room.camera.startScale) * smoothT;
 
-        // Add subtle mouse parallax (2.5D physical depth)
-        const currentX =
+        let targetX =
           room.camera.startX +
           (room.camera.endX - room.camera.startX) * smoothT -
           renderedMouse.x * 2.5;
 
-        const currentY =
+        let targetY =
           room.camera.startY +
           (room.camera.endY - room.camera.startY) * smoothT -
           renderedMouse.y * 2.0;
 
-        if (opacity <= 0.001) {
-          return null; // Skip non-visible rooms for maximum GPU efficiency
+        if (activeRoomHotspot) {
+          const hsLeft = parseFloat(activeRoomHotspot.left);
+          const hsTop = parseFloat(activeRoomHotspot.top);
+          targetScale = 1.44;
+          targetX = (50 - hsLeft) * 0.42 - renderedMouse.x * 1.2;
+          targetY = (50 - hsTop) * 0.42 - renderedMouse.y * 1.2;
         }
 
         return (
@@ -346,17 +387,39 @@ export function PhotographicRoomWalkthrough() {
             className="absolute inset-0 w-full h-full transition-opacity duration-300"
             style={{ opacity }}
           >
-            {/* The Real Room Photographic Canvas */}
+            {/* Real Room Photographic Canvas with Smooth CSS Transition on Focus Zoom */}
             <div
-              className="absolute -inset-10 w-[calc(100%+80px)] h-[calc(100%+80px)] bg-cover bg-center will-change-transform"
+              className="absolute -inset-12 w-[calc(100%+96px)] h-[calc(100%+96px)] bg-cover bg-center will-change-transform"
               style={{
                 backgroundImage: `url(${room.image})`,
-                transform: `scale(${currentScale}) translate3d(${currentX}%, ${currentY}%, 0)`,
+                transform: `scale(${targetScale}) translate3d(${targetX}%, ${targetY}%, 0)`,
                 transformOrigin: "center center",
-                transition: "filter 0.5s ease-out",
-                filter: opacity < 0.8 ? "blur(2px) brightness(0.7)" : "blur(0px) brightness(0.85)",
+                transition: activeRoomHotspot
+                  ? "transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease-out"
+                  : "transform 0.12s linear, filter 0.5s ease-out",
+                filter:
+                  opacity < 0.8
+                    ? "blur(2px) brightness(0.7)"
+                    : activeRoomHotspot
+                    ? "blur(0px) brightness(0.95) contrast(1.06)"
+                    : "blur(0px) brightness(0.84)",
               }}
             />
+
+            {/* Spotlight Dimmer when Hotspot is Focused */}
+            {activeRoomHotspot && (
+              <div
+                className="absolute inset-0 pointer-events-auto transition-opacity duration-500 cursor-zoom-out"
+                onClick={() => {
+                  playFloorClick();
+                  setFocusedHotspot(null);
+                }}
+                style={{
+                  background: `radial-gradient(circle at 50% 50%, transparent 18%, rgba(2, 7, 19, 0.78) 70%)`,
+                }}
+                title="Click anywhere to reset camera zoom"
+              />
+            )}
 
             {/* Room Ambient Rim Flare */}
             <div
@@ -366,59 +429,97 @@ export function PhotographicRoomWalkthrough() {
               }}
             />
 
-            {/* Interactive Spatial Hotspots in the Room */}
+            {/* Interactive Spatial Hotspots */}
             {opacity > 0.85 && (
-              <div className="absolute inset-0 pointer-events-auto">
-                {room.hotspots.map((hs) => (
-                  <div
-                    key={hs.id}
-                    className="absolute"
-                    style={{ top: hs.top, left: hs.left }}
-                  >
-                    <button
-                      onClick={() => {
-                        playFloorClick();
-                        setActiveHotspot(activeHotspot?.id === hs.id ? null : hs);
-                      }}
-                      onMouseEnter={() => {
-                        playFloorClick();
-                        setActiveHotspot(hs);
-                      }}
-                      className="group relative flex items-center justify-center cursor-pointer"
-                      aria-label={hs.title}
+              <div className="absolute inset-0 pointer-events-none">
+                {room.hotspots.map((hs) => {
+                  const isFocused = focusedHotspot?.id === hs.id;
+                  return (
+                    <div
+                      key={hs.id}
+                      className="absolute pointer-events-auto z-30"
+                      style={{ top: hs.top, left: hs.left }}
                     >
-                      {/* Pulse rings */}
-                      <span
-                        className="absolute w-8 h-8 rounded-full animate-ping opacity-60"
-                        style={{ backgroundColor: room.accentColor }}
-                      />
-                      <span
-                        className="relative w-5 h-5 rounded-full border border-white/80 backdrop-blur-md flex items-center justify-center text-[10px] font-bold text-white shadow-lg transition-transform group-hover:scale-125"
-                        style={{ backgroundColor: `${room.accentColor}CC` }}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleToggleHotspot(hs);
+                        }}
+                        className="group relative flex items-center gap-2 cursor-pointer focus:outline-none"
+                        aria-label={`Inspect ${hs.title}`}
                       >
-                        +
-                      </span>
+                        {/* Pulse ring */}
+                        <span
+                          className="absolute -left-1.5 -top-1.5 w-9 h-9 rounded-full animate-ping opacity-50"
+                          style={{ backgroundColor: room.accentColor }}
+                        />
+                        <span
+                          className={`relative w-6 h-6 rounded-full border border-white/90 backdrop-blur-md flex items-center justify-center text-xs font-bold text-white shadow-xl transition-all duration-300 ${
+                            isFocused ? "scale-125 ring-4 ring-white/30" : "group-hover:scale-125"
+                          }`}
+                          style={{ backgroundColor: room.accentColor }}
+                        >
+                          {isFocused ? <Minimize2 className="w-3 h-3" /> : "+"}
+                        </span>
 
-                      {/* Hotspot Floating Tooltip */}
-                      {activeHotspot?.id === hs.id && (
-                        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-64 p-3.5 rounded-xl bg-slate-950/90 backdrop-blur-2xl border border-white/20 shadow-2xl text-left pointer-events-auto z-30 animate-in fade-in zoom-in-95 duration-200">
-                          <span
-                            className="text-[9px] font-mono font-bold uppercase tracking-wider block mb-1"
-                            style={{ color: room.accentColor }}
-                          >
-                            {hs.tag}
-                          </span>
-                          <h4 className="text-xs font-bold text-white mb-1">
+                        {/* Compact Label Pill next to Pin */}
+                        <span className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950/85 border border-white/15 backdrop-blur-xl text-[10px] font-mono text-slate-200 group-hover:text-white group-hover:border-white/40 transition-all shadow-lg">
+                          <span>{hs.tag}</span>
+                          <Maximize2 className="w-2.5 h-2.5 opacity-60 group-hover:opacity-100" />
+                        </span>
+                      </button>
+
+                      {/* Expanded Deep-Focus Architectural Callout Card */}
+                      {isFocused && (
+                        <div
+                          onClick={(e) => e.stopPropagation()}
+                          className="absolute bottom-10 left-1/2 -translate-x-1/2 w-72 sm:w-80 p-4 rounded-2xl bg-slate-950/95 backdrop-blur-2xl border border-white/25 shadow-[0_20px_60px_rgba(0,0,0,0.85)] text-left pointer-events-auto z-40 animate-in fade-in zoom-in-95 duration-200"
+                        >
+                          <div className="flex items-center justify-between mb-2">
+                            <span
+                              className="text-[10px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 rounded bg-white/5"
+                              style={{ color: room.accentColor }}
+                            >
+                              {hs.tag}
+                            </span>
+                            <button
+                              onClick={() => {
+                                playFloorClick();
+                                setFocusedHotspot(null);
+                              }}
+                              className="p-1 rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+                              aria-label="Exit focus zoom"
+                            >
+                              <X className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+
+                          <h4 className="text-sm font-bold text-white mb-1.5">
                             {hs.title}
                           </h4>
-                          <p className="text-[11px] text-slate-300 font-sans leading-relaxed">
+                          <p className="text-xs text-slate-300 font-sans leading-relaxed mb-3">
                             {hs.detail}
                           </p>
+
+                          <div className="pt-2.5 border-t border-white/10 flex items-center justify-between text-[10px] font-mono">
+                            <span className="text-emerald-400 font-semibold">
+                              SPEC: {hs.metric}
+                            </span>
+                            <button
+                              onClick={() => {
+                                playFloorClick();
+                                setFocusedHotspot(null);
+                              }}
+                              className="text-slate-400 hover:text-white underline"
+                            >
+                              RESET ZOOM [ESC]
+                            </button>
+                          </div>
                         </div>
                       )}
-                    </button>
-                  </div>
-                ))}
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>
@@ -426,20 +527,18 @@ export function PhotographicRoomWalkthrough() {
       })}
 
       {/* 2. ARCHITECTURAL VIGNETTE & CONTRAST SHIELDS */}
-      {/* Heavy bottom-to-top vignette to guarantee 100% legibility of typography */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#020713] via-[#020713]/40 to-[#020713]/80 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#020713] via-[#020713]/35 to-[#020713]/80 pointer-events-none" />
 
-      {/* Subtle radial corner shading */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "radial-gradient(circle at center, transparent 40%, rgba(2, 7, 19, 0.75) 100%)",
+            "radial-gradient(circle at center, transparent 42%, rgba(2, 7, 19, 0.72) 100%)",
         }}
       />
 
-      {/* 3. LIVE SPATIAL HUD (riseof.digital signature) */}
-      <div className="absolute bottom-6 right-6 lg:right-12 z-30 hidden sm:flex items-center gap-3 px-3.5 py-1.5 rounded-full bg-slate-950/70 border border-white/10 backdrop-blur-xl text-xs font-mono text-slate-300 select-none">
+      {/* 3. LIVE SPATIAL HUD */}
+      <div className="absolute bottom-6 right-6 lg:right-12 z-30 hidden sm:flex items-center gap-3 px-4 py-1.5 rounded-full bg-slate-950/75 border border-white/15 backdrop-blur-xl text-xs font-mono text-slate-300 select-none pointer-events-auto">
         <span className="flex items-center gap-1.5">
           <span
             className="w-1.5 h-1.5 rounded-full animate-pulse"
@@ -451,7 +550,19 @@ export function PhotographicRoomWalkthrough() {
         </span>
         <span className="text-slate-600">•</span>
         <span className="text-slate-400">
-          WALKTHROUGH: {Math.round(scrollProgress * 100)}%
+          {focusedHotspot ? (
+            <button
+              onClick={() => {
+                playFloorClick();
+                setFocusedHotspot(null);
+              }}
+              className="text-dbh-cyan hover:underline font-semibold"
+            >
+              ZOOM LOCKED (RESET)
+            </button>
+          ) : (
+            `WALKTHROUGH: ${Math.round(scrollProgress * 100)}%`
+          )}
         </span>
       </div>
     </div>

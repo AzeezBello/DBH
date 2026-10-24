@@ -65,74 +65,87 @@ export function ConsultationModal({ isOpen, onClose }: ConsultationModalProps) {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label htmlFor="consult-name" className="block text-xs font-semibold text-slate-300 mb-1.5">
                 Full Name *
               </label>
               <input
+                id="consult-name"
+                name="name"
+                autoComplete="name"
                 required
                 type="text"
                 placeholder="Azeez Bello"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-dbh-cyan focus:ring-1 focus:ring-dbh-cyan"
+                className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-dbh-cyan focus:ring-1 focus:ring-dbh-cyan transition-colors"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label htmlFor="consult-email" className="block text-xs font-semibold text-slate-300 mb-1.5">
                 Corporate Email *
               </label>
               <input
+                id="consult-email"
+                name="email"
+                autoComplete="email"
                 required
                 type="email"
                 placeholder="name@company.com"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-dbh-cyan focus:ring-1 focus:ring-dbh-cyan"
+                className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-dbh-cyan focus:ring-1 focus:ring-dbh-cyan transition-colors"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label htmlFor="consult-company" className="block text-xs font-semibold text-slate-300 mb-1.5">
                 Company / Organization *
               </label>
               <input
+                id="consult-company"
+                name="organization"
+                autoComplete="organization"
                 required
                 type="text"
                 placeholder="Enterprise Bank Ltd"
                 value={formData.company}
                 onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-dbh-cyan focus:ring-1 focus:ring-dbh-cyan"
+                className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-dbh-cyan focus:ring-1 focus:ring-dbh-cyan transition-colors"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label htmlFor="consult-type" className="block text-xs font-semibold text-slate-300 mb-1.5">
                 Project Domain
               </label>
               <select
+                id="consult-type"
+                name="projectType"
                 value={formData.projectType}
                 onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
-                className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-white/10 text-white text-sm focus:outline-none focus:border-dbh-cyan focus:ring-1 focus:ring-dbh-cyan"
+                className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-white/10 text-white text-sm focus:outline-none focus:border-dbh-cyan focus:ring-1 focus:ring-dbh-cyan transition-colors cursor-pointer"
               >
-                <option value="dealing-room">Financial Dealing Room</option>
-                <option value="acoustics">Acoustic Ceilings &amp; Baffles</option>
-                <option value="turnkey">Full Turnkey Office Fitout</option>
-                <option value="ergonomics">Ergonomic Task Seating</option>
+                <option value="dealing-room" className="bg-slate-900 text-white">Financial Dealing Room</option>
+                <option value="acoustics" className="bg-slate-900 text-white">Acoustic Ceilings &amp; Baffles</option>
+                <option value="turnkey" className="bg-slate-900 text-white">Full Turnkey Office Fitout</option>
+                <option value="ergonomics" className="bg-slate-900 text-white">Ergonomic Task Seating</option>
               </select>
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+            <label htmlFor="consult-notes" className="block text-xs font-semibold text-slate-300 mb-1.5">
               Project Notes / Scope (Optional)
             </label>
             <textarea
+              id="consult-notes"
+              name="notes"
               rows={3}
               placeholder="Tell us about the site location, square meters, or target timeline..."
               value={formData.notes}
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-dbh-cyan focus:ring-1 focus:ring-dbh-cyan resize-none"
+              className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-dbh-cyan focus:ring-1 focus:ring-dbh-cyan resize-none transition-colors"
             />
           </div>
 

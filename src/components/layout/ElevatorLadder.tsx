@@ -72,7 +72,9 @@ export function ElevatorLadder() {
             <button
               key={floor.id}
               onClick={() => handleFloorClick(floor.id)}
-              className="group flex items-center gap-3 text-left transition-all cursor-pointer py-1"
+              aria-label={`Navigate to Level ${floor.num}: ${floor.name}`}
+              aria-current={isActive ? "true" : undefined}
+              className="group flex items-center gap-3 text-left transition-all cursor-pointer py-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-dbh-cyan rounded-md"
             >
               <span
                 className={`font-mono text-xs transition-colors duration-200 ${

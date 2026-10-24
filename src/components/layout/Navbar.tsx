@@ -140,38 +140,46 @@ export function Navbar({ onOpenConsultation }: NavbarProps) {
             playFloorClick();
             setMobileMenuOpen(!mobileMenuOpen);
           }}
-          className="xl:hidden p-2 rounded-full bg-white/5 border border-white/10 text-slate-300 hover:text-white transition-colors"
+          className="xl:hidden p-2 rounded-full bg-white/5 border border-white/10 text-slate-300 hover:text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-dbh-cyan"
           aria-label="Toggle Navigation Menu"
+          aria-expanded={mobileMenuOpen}
         >
           {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
         </button>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Drawer & Backdrop */}
       {mobileMenuOpen && (
-        <div className="xl:hidden fixed top-20 left-6 right-6 p-6 rounded-2xl bg-slate-950/95 border border-white/15 backdrop-blur-2xl shadow-2xl flex flex-col gap-3 animate-in fade-in duration-200 z-50">
-          <div className="text-[10px] font-mono tracking-widest text-slate-500 uppercase mb-1">
-            NAVIGATION
-          </div>
-          {NAV_LINKS.map((link) => (
+        <>
+          <div
+            className="xl:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+            onClick={() => setMobileMenuOpen(false)}
+            aria-hidden="true"
+          />
+          <div className="xl:hidden fixed top-20 left-6 right-6 p-6 rounded-2xl bg-slate-950/95 border border-white/15 backdrop-blur-2xl shadow-2xl flex flex-col gap-3 animate-in fade-in duration-200 z-50">
+            <div className="text-[10px] font-mono tracking-widest text-slate-500 uppercase mb-1">
+              NAVIGATION DIRECTORY
+            </div>
+            {NAV_LINKS.map((link) => (
+              <button
+                key={link.label}
+                onClick={() => handleNavLinkClick(link.href)}
+                className="text-left py-2 font-mono text-sm text-slate-200 hover:text-dbh-cyan transition-colors border-b border-white/5 focus:outline-none focus-visible:text-dbh-cyan"
+              >
+                {link.label}
+              </button>
+            ))}
             <button
-              key={link.label}
-              onClick={() => handleNavLinkClick(link.href)}
-              className="text-left py-2 font-mono text-sm text-slate-200 hover:text-dbh-cyan transition-colors border-b border-white/5"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                handleInquire();
+              }}
+              className="w-full mt-3 py-3 rounded-full bg-dbh-cyan text-white font-semibold text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(0,164,239,0.4)] focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
             >
-              {link.label}
+              Schedule Assessment
             </button>
-          ))}
-          <button
-            onClick={() => {
-              setMobileMenuOpen(false);
-              handleInquire();
-            }}
-            className="w-full mt-3 py-3 rounded-full bg-dbh-cyan text-white font-semibold text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(0,164,239,0.4)]"
-          >
-            Schedule Assessment
-          </button>
-        </div>
+          </div>
+        </>
       )}
     </header>
   );
